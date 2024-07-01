@@ -1,4 +1,6 @@
 object Main extends App {
-  println("Hello")
+  val Unscrambled_Cube = new Cube()
 
+  println("Unscrambled Cube:")
+  Unscrambled_Cube.printCube()
 }
