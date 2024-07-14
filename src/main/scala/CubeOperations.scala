@@ -1,4 +1,4 @@
-object Cube_Operations {
+object CubeOperations {
   def applyMove(cube: Cube, move: String): Cube = {
     move match {
       case "U"  => rotateUp(cube)
@@ -25,7 +25,6 @@ object Cube_Operations {
   // 3 = back
   // 4 = left
   // 5 = down
-
   private def rotateFace(face: Array[Array[Char]]): Array[Array[Char]] = {
     Array(
       Array(face(2)(0), face(1)(0), face(0)(0)),
@@ -33,7 +32,7 @@ object Cube_Operations {
       Array(face(2)(2), face(1)(2), face(0)(2))
     )
   }
-  
+
   private def rotateUp(cube: Cube): Cube = {
     val newFaces = cube.faces.map(_.map(_.clone()))
     newFaces(0) = rotateFace(cube.faces(0))
@@ -110,5 +109,17 @@ object Cube_Operations {
       newFaces(4)(2 - i)(0) = temp
     }
     Cube(newFaces)
+  }
+
+  def scrambleCube(cube: Cube, movesCount: Int): Cube = {
+    val randomMoves = CubeOperations.moves
+    (1 to movesCount).foldLeft(cube) { (c, _) =>
+      val move = randomMoves(scala.util.Random.nextInt(randomMoves.length))
+      CubeOperations.applyMove(c, move)
+    }
+  }
+
+  def preScrambleCube(cube: Cube, moves: List[String]): Cube = {
+    moves.foldLeft(cube)((currentCube, move) => applyMove(currentCube, move))
   }
 }
