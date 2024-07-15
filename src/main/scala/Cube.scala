@@ -19,4 +19,6 @@ case class Cube(faces: Array[Array[Array[Char]]]) {
       println()
     }
   }
+
+  def isSolved: Boolean = faces.forall(face => face.flatten.distinct.length == 1)
 }
