@@ -6,7 +6,7 @@ object Main extends App {
 //  println("Unscrambled Cube:")
 //  Unscrambled_Cube.printCube()
 
-//  val movesCount = 10
+//  val movesCount = 11
 //  val scrambledCube = scrambleCube(Unscrambled_Cube, movesCount)
 //  println("Scrambled Cube:")
 //  scrambledCube.printCube()
@@ -24,7 +24,7 @@ object Main extends App {
 //    println("Could not solve the cube.")
 //  }
 
-  val predefinedMoves = List("U", "R", "F", "B")
+  val predefinedMoves = List("U", "R", "F","B","L","R'","F'","D")
   val preScrambledCube = preScrambleCube(Unscrambled_Cube, predefinedMoves)
   println("Predefined Scrambled Cube:")
   preScrambledCube.printCube()

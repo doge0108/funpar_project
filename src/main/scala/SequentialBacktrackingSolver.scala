@@ -6,10 +6,14 @@ object SequentialBacktrackingSolver {
   val visited = mutable.Set[String]()
 
   def heuristic(state: Cube): Int = {
-    val cornerStr = Heuristic.serializeCorners(state)
-    val edgeStr = Heuristic.serializeEdges(state)
-    val cornerHeuristic = Heuristic.cornerPatternDB.getOrElse(cornerStr, 20)
-    val edgeHeuristic = Heuristic.edgePatternDB.getOrElse(edgeStr, 20)
+//    val cornerStr = Heuristic.serializeCorners(state)
+//    val edgeStr = Heuristic.serializeEdges(state)
+//    val cornerHeuristic = Heuristic.cornerPatternDB.getOrElse(cornerStr, 20)
+//    val edgeHeuristic = Heuristic.edgePatternDB.getOrElse(edgeStr, 20)
+    val cornerStr = ParallelHeuristic.serializeCorners(state)
+    val edgeStr = ParallelHeuristic.serializeEdges(state)
+    val cornerHeuristic = ParallelHeuristic.cornerPatternDB.getOrElse(cornerStr, 20)
+    val edgeHeuristic = ParallelHeuristic.edgePatternDB.getOrElse(edgeStr, 20)
     Math.max(cornerHeuristic, edgeHeuristic)
   }
 
