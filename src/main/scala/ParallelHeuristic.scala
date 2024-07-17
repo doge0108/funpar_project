@@ -32,19 +32,17 @@ object ParallelHeuristic {
               patternDB(newCubeStr) = depth + 1
               queue.enqueue((newCube, depth + 1))
             }
-          }
+          }(ec)
         }.toList
 
-        Await.result(Future.sequence(futures), Duration.Inf)
+        Await.result(Future.sequence(futures)(implicitly, ec), Duration.Inf)
       }
     }
   }
 
   def generate(): Unit = {
     val solvedCube = new Cube()
-    println("Generating corner pattern database")
     bfs(solvedCube, cornerPatternDB, serializeCorners)
-    println("Generating edge pattern database")
     bfs(solvedCube, edgePatternDB, serializeEdges)
   }
 }
