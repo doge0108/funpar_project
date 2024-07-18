@@ -50,3 +50,46 @@ You can change the movescount to however much you want the cube to move. I would
     println("Could not solve the predefined scrambled cube.")
   }
 ```
+## Predefined moves
+```scala
+  val predefinedMoves = List("U", "R","D'","L","F'","B","F","R'","U'","D","U","R")
+  val preScrambledCube = preScrambleCube(Unscrambled_Cube, predefinedMoves)
+  println("Predefined Scrambled Cube:")
+  preScrambledCube.printCube()
+```
+These are the moves `val moves = List("U", "U'", "D", "D'", "L", "L'", "R", "R'", "F", "F'", "B", "B'")`
+U = up face
+D = down face
+L = left face
+R = right face
+F = front face
+B = back face
+the ' behind the letter means that it would turn counterclockwise
+These moves would turn the corresponding face that you choose.
+
+## Sequential for predefined moves
+```scala
+  println("Solving the cube")
+  val startTime = System.currentTimeMillis()
+  val solvedPre = SequentialBacktrackingSolver.solve(preScrambledCube)
+  if (solvedPre) {
+    val endTime = System.currentTimeMillis()
+    val solvingTime = (endTime - startTime) / 1000.0
+    println("Predefined Scrambled Cube solved")
+    println("Solved with moves: " + SequentialBacktrackingSolver.moves.reverse.mkString(", "))
+    println(f"It took: $solvingTime%.2f seconds to solve the cube")
+  } else {
+    println("Could not solve the predefined scrambled cube.")
+  }
+```
+
+## Parallel for predefined moves
+```scala
+  println("Solving the cube")
+  val solvedPre = ParallelBacktrackingSolver.solve(preScrambledCube)
+  if (solvedPre) {
+    println("Predefined cube solved")
+  } else {
+    println("Could not solve the predefined scrambled cube.")
+  }
+```
