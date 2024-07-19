@@ -105,6 +105,10 @@ These moves would turn the corresponding face that you choose.
 | List("U", "R","D'","L","F'","B'","R'","L","U'")                  | 950.05 seconds            | 1669.89 seconds         |
 | List("U'", "R'","D'")                                            | 0.14 seconds              | 0.65 seconds            |
 | List("U", "R","D'","L","F'","B","F","R'","U'","D","L")           | N/A                       | 1614.05 seconds         |
+| List("R'","F'","L'","U'","B'","D'")                              | 2.21 seconds              | 3.09 seconds            |
+| List("R'","F'","L'","U'","B'","D'","F","D")                      | 280.14 seconds            | 153.93 seconds          |
+
+Regrettably after trying many things I still can't optimize the parallel further and have it be clearly the more efficient version. Although it is able to solve more moves, it takes longer on the simpler moves. 
  
 ## Poster
 [Link text](Parallel-2.pdf)
