@@ -64,6 +64,7 @@ These are the moves `val moves = List("U", "U'", "D", "D'", "L", "L'", "R", "R'"
 - R = right face
 - F = front face
 - B = back face
+  
 The ' behind the letter means that it would turn counterclockwise
 These moves would turn the corresponding face that you choose.
 
@@ -97,13 +98,13 @@ These moves would turn the corresponding face that you choose.
 
 |                     Predefined Cube                              | Sequential Time (seconds) | Parallel Time (seconds) |
 |------------------------------------------------------------------|---------------------------|-------------------------|
-| List("U", "R","D'","L","F'","B","F","R'","U'","D")               | 76.07 seconds             | 109.64                  |
+| List("U", "R","D'","L","F'","B","F","R'","U'","D")               | 76.07 seconds             | 109.64 seconds          |
 | List("U", "R","D'","L","F'","B","F","R'","U'","D","R'","D'")     | N/A                       | 147.49 seconds          |
 | List("U", "R","D'","L","F'")                                     | 0.93 seconds              | 1.42 seconds            |
 | List("U", "R","D'","L","F'","B'","R'")                           | 36.62 seconds             | 14.91 seconds           |
 | List("U", "R","D'","L","F'","B'","R'","L","U'")                  | 950.05 seconds            | 1669.89 seconds         |
 | List("U'", "R'","D'")                                            | 0.14 seconds              | 0.65 seconds            |
 | List("U", "R","D'","L","F'","B","F","R'","U'","D","L")           | N/A                       | 1614.05 seconds         |
-
+ 
 ## Poster
 [Link text](Parallel-2.pdf)
