@@ -31,7 +31,7 @@ object Main extends App {
 //    println("Could not solve the predefined scrambled cube.")
 //  }
 
-  val predefinedMoves = List("U", "R","D'","L","F'","B","F","R'","U'","D","U","R")
+  val predefinedMoves = List("U", "R","D'","L","F'")
   val preScrambledCube = preScrambleCube(Unscrambled_Cube, predefinedMoves)
   println("Predefined Scrambled Cube:")
   preScrambledCube.printCube()
@@ -50,8 +50,10 @@ object Main extends App {
 //  }
 
   println("Solving the cube")
-  val solvedPre = ParallelBacktrackingSolver.solve(preScrambledCube)
-  if (solvedPre) {
+  val (solved, solvedCube) = ParallelBacktrackingSolver.solve(preScrambledCube)
+  if (solved) {
+    println("Solved Cube:")
+    solvedCube.printCube()
     println("Predefined cube solved")
   } else {
     println("Could not solve the predefined scrambled cube.")

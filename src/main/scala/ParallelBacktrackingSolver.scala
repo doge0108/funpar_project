@@ -20,42 +20,44 @@ object ParallelBacktrackingSolver {
     Math.max(cornerHeuristic, edgeHeuristic)
   }
 
-  def sequentialSearch(state: Cube, depth: Int, bound: Int, previousMove: String = "", path: List[String] = Nil): (Boolean, Int, List[String]) = {
+  def sequentialSearch(state: Cube, depth: Int, bound: Int, previousMove: String = "", path: List[String] = Nil): (Boolean, Int, List[String], Cube) = {
     if (state.isSolved) {
-      (true, depth, path.reverse)
+      (true, depth, path.reverse, state)
     } else if (depth >= maxDepth) {
-      (false, Int.MaxValue, path)
+      (false, Int.MaxValue, path, state)
     } else {
       val fScore = depth + heuristic(state)
       if (fScore > bound) {
-        (false, fScore, path)
+        (false, fScore, path, state)
       } else {
         var minVal = Int.MaxValue
         for (move <- CubeOperations.moves if move != previousMove.reverse) {
-          val (found, newBound, newPath) = sequentialSearch(CubeOperations.applyMove(state, move), depth + 1, bound, move, move :: path)
-          if (found) return (true, newBound, newPath)
+          val newState = CubeOperations.applyMove(state, move)
+          val (found, newBound, newPath, solvedState) = sequentialSearch(newState, depth + 1, bound, move, move :: path)
+          if (found) return (true, newBound, newPath, solvedState)
           if (newBound < minVal) minVal = newBound
         }
-        (false, minVal, path)
+        (false, minVal, path, state)
       }
     }
   }
 
-  def parallelSearch(state: Cube, depth: Int, bound: Int, previousMove: String = "", path: List[String] = Nil): Future[(Boolean, Int, List[String])] = {
+  def parallelSearch(state: Cube, depth: Int, bound: Int, previousMove: String = "", path: List[String] = Nil): Future[(Boolean, Int, List[String], Cube)] = {
     if (depth <= 2) {
       val moveFutures = CubeOperations.moves.par.filter(_ != previousMove.reverse).map { move =>
         Future {
-          sequentialSearch(CubeOperations.applyMove(state, move), depth + 1, bound, move, move :: path)
+          val newState = CubeOperations.applyMove(state, move)
+          sequentialSearch(newState, depth + 1, bound, move, move :: path)
         }
       }.toList
 
       Future.sequence(moveFutures).map { results =>
         if (results.exists(_._1)) {
           val foundResult = results.find(_._1).get
-          (true, foundResult._2, foundResult._3)
+          (true, foundResult._2, foundResult._3, foundResult._4)
         } else {
           val minVal = results.map(_._2).min
-          (false, minVal, path)
+          (false, minVal, path, state)
         }
       }
     } else {
@@ -65,7 +67,7 @@ object ParallelBacktrackingSolver {
     }
   }
 
-  def solve(initialState: Cube): Boolean = {
+  def solve(initialState: Cube): (Boolean, Cube) = {
     val startTime = System.currentTimeMillis()
     moves = List()
     var bound = heuristic(initialState)
@@ -73,23 +75,23 @@ object ParallelBacktrackingSolver {
       visited.clear()
       val result = Await.result(parallelSearch(initialState, 0, bound), Duration.Inf)
       result match {
-        case (found, _, solutionPath) if found =>
+        case (found, _, solutionPath, solvedState) if found =>
           threadPool.shutdown()
           val endTime = System.currentTimeMillis()
           val solvingTime = (endTime - startTime) / 1000.0
           moves = solutionPath
           println(s"Solved with moves: ${moves.reverse.mkString(", ")}")
           println(f"It took: $solvingTime%.2f seconds to solve the cube")
-          return true
-        case (_, newBound, _) if newBound == Int.MaxValue =>
+          return (true, solvedState)
+        case (_, newBound, _, _) if newBound == Int.MaxValue =>
           threadPool.shutdown()
           println("No solution found, returning false")
-          return false
-        case (_, newBound, _) =>
+          return (false, initialState)
+        case (_, newBound, _, _) =>
           bound = newBound
       }
     }
     threadPool.shutdown()
-    false
+    (false, initialState)
   }
 }
